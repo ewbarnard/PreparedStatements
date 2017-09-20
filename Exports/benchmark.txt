@@ -1,0 +1,12 @@
+prepared(master) $ time bin/cake benchmark --verbose
+Method               Seconds    Rows Per Second      Gain
+modelSave            306.85     327.51               1.0X
+modelSaveMany        273.67     366.40               1.1X
+bulkInsertSingle     30.38      3,301.56             10.1X
+preparedSingle       25.93      3,857.06             11.8X
+preparedBulk         3.32       30,123.15            92.0X
+
+real	53m39.946s
+user	46m49.333s
+sys	0m56.478s
+prepared(master) $
