@@ -42,24 +42,6 @@ class FirstImportShell extends Shell {
         $this->verbose(PHP_EOL . 'Done.', 2);
     }
 
-    private function report() {
-        $this->verbose(PHP_EOL . 'Motion Counts:');
-        $this->queryMotion->execute([]);
-        $rows = $this->queryMotion->fetchAll('assoc');
-        foreach ($rows as $row) {
-            $line = sprintf('%-10s %-8s', $row['motion'], $row['count']);
-            $this->verbose($line);
-        }
-
-        $this->verbose(PHP_EOL . 'Nearest-Waypoint Counts:');
-        $this->queryNearest->execute([]);
-        $rows = $this->queryNearest->fetchAll('assoc');
-        foreach ($rows as $row) {
-            $line = sprintf('%-50s %-8s', $row['nearest'], $row['count']);
-            $this->verbose($line);
-        }
-    }
-
     private function prepareStatements() {
         ini_set('memory_limit', '2048M');
         $this->connection = ConnectionManager::get('default');
@@ -79,11 +61,11 @@ class FirstImportShell extends Shell {
           LIMIT 10';
         $this->queryMotion = $this->connection->prepare($sql);
 
-        $sql = 'select nearest, count(nearest) count
-          from prepared_statements.first_import 
-          group by nearest 
-          order by count(nearest) 
-          limit 100';
+        $sql = 'SELECT nearest, count(nearest) count
+          FROM prepared_statements.first_import 
+          GROUP BY nearest 
+          ORDER BY count(nearest) 
+          LIMIT 100';
         $this->queryNearest = $this->connection->prepare($sql);
     }
 
@@ -110,6 +92,24 @@ class FirstImportShell extends Shell {
             if (!(is_array($row) && array_key_exists('id', $row))) {
                 $this->insert->execute(array_values($item));
             }
+        }
+    }
+
+    private function report() {
+        $this->verbose(PHP_EOL . 'Motion Counts:');
+        $this->queryMotion->execute([]);
+        $rows = $this->queryMotion->fetchAll('assoc');
+        foreach ($rows as $row) {
+            $line = sprintf('%-10s %-8s', $row['motion'], $row['count']);
+            $this->verbose($line);
+        }
+
+        $this->verbose(PHP_EOL . 'Nearest-Waypoint Counts:');
+        $this->queryNearest->execute([]);
+        $rows = $this->queryNearest->fetchAll('assoc');
+        foreach ($rows as $row) {
+            $line = sprintf('%-50s %-8s', $row['nearest'], $row['count']);
+            $this->verbose($line);
         }
     }
 }
