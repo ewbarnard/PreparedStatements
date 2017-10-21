@@ -100,7 +100,8 @@ class FirstImportShell extends Shell {
         $this->queryMotion->execute([]);
         $rows = $this->queryMotion->fetchAll('assoc');
         foreach ($rows as $row) {
-            $line = sprintf('%-10s %-8s', $row['motion'], $row['count']);
+            $line = sprintf('%-10s %-8s', $row['motion'],
+                $row['count']);
             $this->verbose($line);
         }
 
@@ -108,7 +109,8 @@ class FirstImportShell extends Shell {
         $this->queryNearest->execute([]);
         $rows = $this->queryNearest->fetchAll('assoc');
         foreach ($rows as $row) {
-            $line = sprintf('%-50s %-8s', $row['nearest'], $row['count']);
+            $line = sprintf('%-50s %-8s', $row['nearest'],
+                $row['count']);
             $this->verbose($line);
         }
     }
